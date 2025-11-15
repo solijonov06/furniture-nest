@@ -41,19 +41,19 @@ export class PropertyUpdate {
 
     @IsOptional()
     @Field(() => Number, { nullable: true })
-    propertySquare?: number
+    propertyVolume?: number
 
-    @IsOptional()
-    @IsInt()
-    @Min(1)
-    @Field(()=> Int, {nullable: true})
-    propertyBeds?: number;
+    // @IsOptional()
+    // @IsInt()
+    // @Min(1)
+    // @Field(()=> Int, {nullable: true})
+    // propertyBeds?: number;
 
-    @IsOptional()
-    @IsInt()
-    @Min(1)
-    @Field(()=> Int, {nullable: true})
-    propertyRooms?: number;
+    // @IsOptional()
+    // @IsInt()
+    // @Min(1)
+    // @Field(()=> Int, {nullable: true})
+    // propertyRooms?: number;
 
     @IsOptional()
     @Field(() => [String], { nullable: true })

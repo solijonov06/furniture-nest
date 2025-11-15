@@ -34,19 +34,19 @@ propertyPrice: number;
 
 @IsNotEmpty()
 @Field(()=>Number)
-propertySquare: number;
+propertyVolume: number;
 
-@IsNotEmpty()
-@IsInt()
-@Min(1)
-@Field(()=>Number)
-propertyBeds: number;
+// @IsNotEmpty()
+// @IsInt()
+// @Min(1)
+// @Field(()=>Number)
+// propertyBeds: number;
 
-@IsNotEmpty()
-@IsInt()
-@Min(1)
-@Field(()=>Number)
-propertyRooms: number;
+// @IsNotEmpty()
+// @IsInt()
+// @Min(1)
+// @Field(()=>Number)
+// propertyRooms: number;
 
 @IsNotEmpty()
 @Field(()=>[String])

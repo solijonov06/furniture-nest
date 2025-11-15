@@ -36,20 +36,20 @@ const PropertySchema = new Schema(
 			required: true,
 		},
 
-		propertySquare: {
+		propertyVolume: {
 			type: Number,
 			required: true,
 		},
 
-		propertyBeds: {
-			type: Number,
-			required: true,
-		},
+		// propertyBeds: {
+		// 	type: Number,
+		// 	required: true,
+		// },
 
-		propertyRooms: {
-			type: Number,
-			required: true,
-		},
+		// propertyRooms: {
+		// 	type: Number,
+		// 	required: true,
+		// },
 
 		propertyViews: {
 			type: Number,

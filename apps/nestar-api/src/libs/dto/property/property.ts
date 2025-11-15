@@ -35,15 +35,15 @@ export class Property {
 
 
     @Field(()=> Number)
-    propertySquare: number
+    propertyVolume: number
 
 
-    @Field(()=> Int)
-    propertyBeds: number
+    // @Field(()=> Int)
+    // propertyBeds: number
 
 
-    @Field(()=> Int)
-    propertyRooms: number
+    // @Field(()=> Int)
+    // propertyRooms: number
 
     @Field(()=> Int)
     propertyViews: number
