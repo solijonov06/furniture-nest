@@ -332,7 +332,8 @@ export class PropertyService {
 
 	public async removePropertyByAdmin(propertyId: ObjectId): Promise<Property> {
 		console.log(propertyId);
-		const search: T = { _id: propertyId, propertyStatus: PropertyStatus.DELETE };
+		const search: T = { _id: propertyId };
+		// , propertyStatus: PropertyStatus.DELETE
 		const result: Property = await this.propertyModel.findOneAndDelete(search).exec();
 
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
