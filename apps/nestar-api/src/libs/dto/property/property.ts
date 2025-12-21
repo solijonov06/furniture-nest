@@ -1,7 +1,7 @@
 import { MemberAuthType, MemberStatus, MemberType } from '../../enums/member.enum';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
-import { PropertyLocation, PropertyStatus, PropertyType } from '../../enums/property.enum';
+import { FurnitureCondition, PropertyCategory, PropertyLocation, PropertyMaterial, PropertyStatus, PropertyType } from '../../enums/property.enum';
 import {Member, TotalCounter} from '../../dto/member/member'
 import { MeLiked } from '../like/like';
 
@@ -13,37 +13,35 @@ export class Property {
     @Field(()=> PropertyType)
     propertyType: PropertyType;
 
-
     @Field(()=> PropertyStatus)
     propertyStatus: PropertyStatus
-
 
     @Field(()=> PropertyLocation)
     propertyLocation: PropertyLocation
 
-
     @Field(()=> String)
     propertyAddress: string
 
-     
     @Field(()=> String)
     propertyTitle: string
-
 
     @Field(()=> Number)
     propertyPrice: number
 
-
     @Field(()=> Number)
     propertyVolume: number
 
+    @Field(()=> PropertyMaterial, {nullable: true})
+    propertyMaterial?: PropertyMaterial
 
-    // @Field(()=> Int)
-    // propertyBeds: number
+    @Field(()=> PropertyCategory, {nullable: true})
+    propertyCategory?: PropertyCategory
 
+    @Field(()=> FurnitureCondition, {nullable: true})
+    furnitureCondition?: FurnitureCondition
 
-    // @Field(()=> Int)
-    // propertyRooms: number
+    @Field(()=> Boolean, {nullable: true})
+    deliveryAvailable?: boolean
 
     @Field(()=> Int)
     propertyViews: number
@@ -63,12 +61,6 @@ export class Property {
     @Field(()=> String, {nullable: true})
     propertyDesc?: string
 
-    @Field(()=> Boolean)
-    propertyBarter: boolean;
-
-    @Field(()=> Boolean)
-    propertyRent: boolean;
-
     @Field(()=> String)
     memberId: ObjectId;
 
@@ -78,24 +70,19 @@ export class Property {
     @Field(() => Date, {nullable: true})
     deletedAt?: Date;
 
-    @Field(() => Date, {nullable: true})
-    constructedAt?: Date;
-
     @Field(() => Date)
     createdAt: Date;
 
     @Field(() => Date)
     updatedAt: Date;
 
-
     //from aggregation
     @Field(()=> Member, {nullable: true})
     memberData?: Member;
 
-     /**from aggregation */
-    
-       @Field(()=> [MeLiked], {nullable: true})
-       meLiked?: MeLiked[];
+    /**from aggregation */
+    @Field(()=> [MeLiked], {nullable: true})
+    meLiked?: MeLiked[];
 }
 
 

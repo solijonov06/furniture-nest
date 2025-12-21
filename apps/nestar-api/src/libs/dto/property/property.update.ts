@@ -2,8 +2,7 @@ import { Field, InputType, Int } from "@nestjs/graphql";
 import { IsInt, IsNotEmpty,  IsOptional, Length, Min } from 'class-validator';
 import { MemberStatus, MemberType } from "../../enums/member.enum";
 import type { ObjectId } from "mongoose";
-import { PropertyLocation, PropertyStatus, PropertyType } from "../../enums/property.enum";
-
+import { FurnitureCondition, PropertyCategory, PropertyLocation, PropertyMaterial, PropertyStatus, PropertyType } from "../../enums/property.enum";
 
 
 @InputType()
@@ -29,7 +28,6 @@ export class PropertyUpdate {
     @Field(() => String, { nullable: true })
     propertyAddress?: string
 
-
     @IsOptional()
     @Length(3,100)
     @Field(() => String, { nullable: true })
@@ -43,17 +41,21 @@ export class PropertyUpdate {
     @Field(() => Number, { nullable: true })
     propertyVolume?: number
 
-    // @IsOptional()
-    // @IsInt()
-    // @Min(1)
-    // @Field(()=> Int, {nullable: true})
-    // propertyBeds?: number;
+    @IsOptional()
+    @Field(() => PropertyMaterial, { nullable: true })
+    propertyMaterial?: PropertyMaterial
 
-    // @IsOptional()
-    // @IsInt()
-    // @Min(1)
-    // @Field(()=> Int, {nullable: true})
-    // propertyRooms?: number;
+    @IsOptional()
+    @Field(() => PropertyCategory, { nullable: true })
+    propertyCategory?: PropertyCategory
+
+    @IsOptional()
+    @Field(() => FurnitureCondition, { nullable: true })
+    furnitureCondition?: FurnitureCondition
+
+    @IsOptional()
+    @Field(() => Boolean, { nullable: true })
+    deliveryAvailable?: boolean
 
     @IsOptional()
     @Field(() => [String], { nullable: true })
@@ -64,19 +66,7 @@ export class PropertyUpdate {
     @Field(() => String, { nullable: true })
     propertyDesc?: string
 
-    @IsOptional()
-    @Field(() => Boolean, { nullable: true })
-    propertyBarter?: boolean
-
-    @IsOptional()
-    @Field(() => Boolean, { nullable: true })
-    propertyRent?: boolean
-
     soldAt?:Date;
 
     deletedAt?: Date;
-
-    @IsOptional()
-    @Field(() => Date, { nullable: true })
-    constructedAt?: Date
 }

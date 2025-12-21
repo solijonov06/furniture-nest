@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsIn, IsInt, IsNotEmpty, IsOptional, Length, Min } from 'class-validator';
-import { PropertyLocation, PropertyStatus, PropertyType } from '../../enums/property.enum';
+import { FurnitureCondition, PropertyCategory, PropertyLocation, PropertyMaterial, PropertyStatus, PropertyType } from '../../enums/property.enum';
 import { ObjectId } from 'mongoose';
 import { availableOptions, availablePropertySorts } from '../../config';
 import { Direction } from '../../enums/common.enum';
@@ -8,7 +8,6 @@ import { Direction } from '../../enums/common.enum';
 
 @InputType()
 export class PropertyInput {
-
 
 @IsNotEmpty()
 @Field(()=>PropertyType)
@@ -36,17 +35,21 @@ propertyPrice: number;
 @Field(()=>Number)
 propertyVolume: number;
 
-// @IsNotEmpty()
-// @IsInt()
-// @Min(1)
-// @Field(()=>Number)
-// propertyBeds: number;
+@IsOptional()
+@Field(()=>PropertyMaterial, {nullable: true})
+propertyMaterial?: PropertyMaterial;
 
-// @IsNotEmpty()
-// @IsInt()
-// @Min(1)
-// @Field(()=>Number)
-// propertyRooms: number;
+@IsOptional()
+@Field(()=>PropertyCategory, {nullable: true})
+propertyCategory?: PropertyCategory;
+
+@IsOptional()
+@Field(()=>FurnitureCondition, {nullable: true})
+furnitureCondition?: FurnitureCondition;
+
+@IsOptional()
+@Field(()=>Boolean, {nullable: true})
+deliveryAvailable?: boolean;
 
 @IsNotEmpty()
 @Field(()=>[String])
@@ -57,20 +60,7 @@ propertyImages: string[];
 @Field(()=>String, {nullable: true})
 propertyDesc?: string;
 
-@IsOptional()
-@Field(()=>Boolean, {nullable: true})
-propertyBarter?: boolean;
-
-@IsOptional()
-@Field(()=>Boolean, {nullable: true})
-propertyRent?: boolean;
-
 memberId?: ObjectId;
-
-@IsOptional()
-@Field(()=>Date, {nullable: true})
-constructedAt?: Date;
-
 
 }
 
@@ -93,15 +83,6 @@ export class SquaresRange{
     end: number;
 }
 
-@InputType()
-export class PeriodsRange{
-
-    @Field(()=>Date)
-    start: Date;
-
-    @Field(()=>Date)
-    end: Date;
-}
 
 @InputType()
 export class PISearch{
@@ -109,7 +90,6 @@ export class PISearch{
 @IsOptional()
 @Field(()=>String, {nullable: true})
 memberId?:ObjectId
-
 
 @IsOptional()
 @Field(()=>[PropertyLocation], {nullable: true})
@@ -120,12 +100,16 @@ locationList?:PropertyLocation[]
 typeList?:PropertyType[]
 
 @IsOptional()
-@Field(()=>[Int], {nullable: true})
-roomsList?:number[]
+@Field(()=>[PropertyCategory], {nullable: true})
+categoryList?:PropertyCategory[]
 
 @IsOptional()
-@Field(()=>[Int], {nullable: true})
-bedsList?:number[]
+@Field(()=>[PropertyMaterial], {nullable: true})
+materialList?:PropertyMaterial[]
+
+@IsOptional()
+@Field(()=>[FurnitureCondition], {nullable: true})
+conditionList?:FurnitureCondition[]
 
 @IsOptional()
 @IsIn(availableOptions, {each: true})
@@ -135,10 +119,6 @@ options?: string[]
 @IsOptional()
 @Field(()=>PricesRange, {nullable: true})
 pricesRange?:PricesRange
-
-@IsOptional()
-@Field(()=>PeriodsRange, {nullable: true})
-periodsRange?:PeriodsRange
 
 @IsOptional()
 @Field(()=>SquaresRange, {nullable: true})

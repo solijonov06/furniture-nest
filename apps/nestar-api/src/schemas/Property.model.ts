@@ -1,5 +1,12 @@
 import { Schema } from 'mongoose';
-import { PropertyLocation, PropertyStatus, PropertyType } from '../libs/enums/property.enum';
+import { 
+	FurnitureCondition, 
+	PropertyCategory, 
+	PropertyLocation, 
+	PropertyMaterial, 
+	PropertyStatus, 
+	PropertyType 
+} from '../libs/enums/property.enum';
 
 const PropertySchema = new Schema(
 	{
@@ -41,15 +48,28 @@ const PropertySchema = new Schema(
 			required: true,
 		},
 
-		// propertyBeds: {
-		// 	type: Number,
-		// 	required: true,
-		// },
+		propertyMaterial: {
+			type: String,
+			enum: PropertyMaterial,
+			default: PropertyMaterial.WOOD,
+		},
 
-		// propertyRooms: {
-		// 	type: Number,
-		// 	required: true,
-		// },
+		propertyCategory: {
+			type: String,
+			enum: PropertyCategory,
+			default: PropertyCategory.LIVING_ROOM,
+		},
+
+		furnitureCondition: {
+			type: String,
+			enum: FurnitureCondition,
+			default: FurnitureCondition.GOOD,
+		},
+
+		deliveryAvailable: {
+			type: Boolean,
+			default: false,
+		},
 
 		propertyViews: {
 			type: Number,
@@ -80,16 +100,6 @@ const PropertySchema = new Schema(
 			type: String,
 		},
 
-		propertyBarter: {
-			type: Boolean,
-			default: false,
-		},
-
-		propertyRent: {
-			type: Boolean,
-			default: false,
-		},
-
 		memberId: {
 			type: Schema.Types.ObjectId,
 			required: true,
@@ -101,10 +111,6 @@ const PropertySchema = new Schema(
 		},
 
 		deletedAt: {
-			type: Date,
-		},
-
-		constructedAt: {
 			type: Date,
 		},
 	},
