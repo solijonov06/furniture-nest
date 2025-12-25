@@ -14,6 +14,10 @@ export const availablePropertySorts = [
 ];
 export const availableBoardArticleSorts = ['createdAt', 'updatedAt', 'articleLikes', 'articleViews'];
 export const availableCommentSorts = ['createdAt', 'updatedAt'];
+export const availableNoticeSorts = ['createdAt', 'updatedAt'];
+export const availableFaqSorts = ['createdAt', 'updatedAt'];
+export const availableEventSorts = ['createdAt', 'updatedAt', 'eventStartDate', 'eventEndDate'];
+export const availableNotificationSorts = ['createdAt', 'updatedAt'];
 
 /* IMAGE CONFIGURATION */
 import { v4 as uuidv4 } from 'uuid';
@@ -136,3 +140,21 @@ export const lookupVisit = {
 	},
 
 }
+
+export const lookupAuthor = {
+	$lookup: {
+		from: 'members',
+		localField: 'authorId',
+		foreignField: '_id',
+		as: 'authorData',
+	},
+};
+
+export const lookupReceiver = {
+	$lookup: {
+		from: 'members',
+		localField: 'receiverId',
+		foreignField: '_id',
+		as: 'receiverData',
+	},
+};
