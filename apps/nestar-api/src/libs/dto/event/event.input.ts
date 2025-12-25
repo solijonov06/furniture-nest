@@ -7,35 +7,44 @@ import { availableEventSorts } from '../../config';
 
 @InputType()
 export class EventInput {
-	@IsNotEmpty()
-	@Field(() => EventType)
-	eventType: EventType;
+	@IsOptional()
+	@Field(() => EventType, { nullable: true })
+	eventType?: EventType;
 
 	@IsNotEmpty()
 	@Length(3, 100)
 	@Field(() => String)
 	eventTitle: string;
 
-	@IsOptional()
+	@IsNotEmpty()
+	@Length(2, 100)
+	@Field(() => String)
+	eventCity: string;
+
+	@IsNotEmpty()
 	@Length(3, 2000)
-	@Field(() => String, { nullable: true })
-	eventDesc?: string;
+	@Field(() => String)
+	eventDescription: string;
 
 	@IsNotEmpty()
 	@Field(() => String)
 	eventImage: string;
 
-	@IsNotEmpty()
-	@Field(() => String)
-	eventLocation: string;
+	@IsOptional()
+	@Field(() => Date, { nullable: true })
+	eventStartDate?: Date;
 
-	@IsNotEmpty()
-	@Field(() => Date)
-	eventStartDate: Date;
+	@IsOptional()
+	@Field(() => Date, { nullable: true })
+	eventEndDate?: Date;
 
-	@IsNotEmpty()
-	@Field(() => Date)
-	eventEndDate: Date;
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	eventLocation?: string;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	eventLink?: string;
 
 	memberId?: ObjectId;
 }

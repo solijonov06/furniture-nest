@@ -43,7 +43,13 @@ export class EventService {
 
 		if (eventType) match.eventType = eventType;
 		if (eventStatus) match.eventStatus = eventStatus;
-		if (text) match.eventTitle = { $regex: new RegExp(text, 'i') };
+		if (text) {
+			match.$or = [
+				{ eventTitle: { $regex: new RegExp(text, 'i') } },
+				{ eventCity: { $regex: new RegExp(text, 'i') } },
+				{ eventDescription: { $regex: new RegExp(text, 'i') } },
+			];
+		}
 
 		console.log('match:', match);
 

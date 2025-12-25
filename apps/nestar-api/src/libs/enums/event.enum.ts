@@ -1,8 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum EventStatus {
-	HOLD = 'HOLD',
 	ACTIVE = 'ACTIVE',
+	PAUSED = 'PAUSED',
+	ENDED = 'ENDED',
 	DELETE = 'DELETE',
 }
 registerEnumType(EventStatus, {

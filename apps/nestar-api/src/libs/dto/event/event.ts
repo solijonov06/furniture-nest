@@ -8,8 +8,8 @@ export class Event {
 	@Field(() => String)
 	_id: ObjectId;
 
-	@Field(() => EventType)
-	eventType: EventType;
+	@Field(() => EventType, { nullable: true })
+	eventType?: EventType;
 
 	@Field(() => EventStatus)
 	eventStatus: EventStatus;
@@ -17,20 +17,26 @@ export class Event {
 	@Field(() => String)
 	eventTitle: string;
 
-	@Field(() => String, { nullable: true })
-	eventDesc?: string;
+	@Field(() => String)
+	eventCity: string;
+
+	@Field(() => String)
+	eventDescription: string;
 
 	@Field(() => String)
 	eventImage: string;
 
-	@Field(() => String)
-	eventLocation: string;
+	@Field(() => Date, { nullable: true })
+	eventStartDate?: Date;
 
-	@Field(() => Date)
-	eventStartDate: Date;
+	@Field(() => Date, { nullable: true })
+	eventEndDate?: Date;
 
-	@Field(() => Date)
-	eventEndDate: Date;
+	@Field(() => String, { nullable: true })
+	eventLocation?: string;
+
+	@Field(() => String, { nullable: true })
+	eventLink?: string;
 
 	@Field(() => String)
 	memberId: ObjectId;

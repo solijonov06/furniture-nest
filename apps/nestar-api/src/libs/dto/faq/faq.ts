@@ -23,6 +23,9 @@ export class Faq {
 	@Field(() => String)
 	memberId: ObjectId;
 
+	 @Field(() => Int, { defaultValue: 0 })
+  faqViews: number;
+
 	@Field(() => Date)
 	createdAt: Date;
 

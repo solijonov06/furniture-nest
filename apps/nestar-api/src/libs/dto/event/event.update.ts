@@ -23,17 +23,18 @@ export class EventUpdate {
 	eventTitle?: string;
 
 	@IsOptional()
+	@Length(2, 100)
+	@Field(() => String, { nullable: true })
+	eventCity?: string;
+
+	@IsOptional()
 	@Length(3, 2000)
 	@Field(() => String, { nullable: true })
-	eventDesc?: string;
+	eventDescription?: string;
 
 	@IsOptional()
 	@Field(() => String, { nullable: true })
 	eventImage?: string;
-
-	@IsOptional()
-	@Field(() => String, { nullable: true })
-	eventLocation?: string;
 
 	@IsOptional()
 	@Field(() => Date, { nullable: true })
@@ -42,5 +43,13 @@ export class EventUpdate {
 	@IsOptional()
 	@Field(() => Date, { nullable: true })
 	eventEndDate?: Date;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	eventLocation?: string;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	eventLink?: string;
 }
 

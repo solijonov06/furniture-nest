@@ -6,7 +6,7 @@ const EventSchema = new Schema(
 		eventType: {
 			type: String,
 			enum: EventType,
-			required: true,
+			default: EventType.OTHER,
 		},
 
 		eventStatus: {
@@ -20,8 +20,14 @@ const EventSchema = new Schema(
 			required: true,
 		},
 
-		eventDesc: {
+		eventCity: {
 			type: String,
+			required: true,
+		},
+
+		eventDescription: {
+			type: String,
+			required: true,
 		},
 
 		eventImage: {
@@ -29,19 +35,20 @@ const EventSchema = new Schema(
 			required: true,
 		},
 
-		eventLocation: {
-			type: String,
-			required: true,
-		},
-
 		eventStartDate: {
 			type: Date,
-			required: true,
 		},
 
 		eventEndDate: {
 			type: Date,
-			required: true,
+		},
+
+		eventLocation: {
+			type: String,
+		},
+
+		eventLink: {
+			type: String,
 		},
 
 		memberId: {

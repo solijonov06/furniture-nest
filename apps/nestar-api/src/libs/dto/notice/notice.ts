@@ -23,6 +23,9 @@ export class Notice {
 	@Field(() => String)
 	memberId: ObjectId;
 
+	 @Field(() => Int, { defaultValue: 0 })
+  noticeViews: number;
+
 	@Field(() => Date)
 	createdAt: Date;
 
