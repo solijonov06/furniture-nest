@@ -11,6 +11,7 @@ import { NoticeModule } from './notice/notice.module';
 import { FaqModule } from './faq/faq.module';
 import { NotificationModule } from './notification/notification.module';
 import { EventModule } from './event/event.module';
+import { InquiryModule } from './inquiry/inquiry.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { EventModule } from './event/event.module';
     FaqModule,
     NotificationModule,
     EventModule,
+    InquiryModule,
   ],
 })
 export class ComponentsModule {}

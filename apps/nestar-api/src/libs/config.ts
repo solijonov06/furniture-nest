@@ -18,6 +18,7 @@ export const availableNoticeSorts = ['createdAt', 'updatedAt'];
 export const availableFaqSorts = ['createdAt', 'updatedAt'];
 export const availableEventSorts = ['createdAt', 'updatedAt', 'eventStartDate', 'eventEndDate'];
 export const availableNotificationSorts = ['createdAt', 'updatedAt'];
+export const availableInquirySorts = ['createdAt', 'updatedAt', 'answeredAt'];
 
 /* IMAGE CONFIGURATION */
 import { v4 as uuidv4 } from 'uuid';
