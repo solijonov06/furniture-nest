@@ -11,6 +11,8 @@ import { Comments, Comment } from '../../libs/dto/comment/comment';
 import { CommentUpdate } from '../../libs/dto/comment/common.update';
 import { T } from '../../libs/types/common';
 import { lookupMember } from '../../libs/config';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class CommentService {
@@ -19,12 +21,14 @@ export class CommentService {
         private readonly memberService: MemberService,
         private readonly propertyService: PropertyService,
         private readonly boardArticleService: BoardArticleService,
+        private readonly notificationService: NotificationService,
     ) {}
 
     public async createComment(memberId: ObjectId, input: CommentInput): Promise<Comment> {
         input.memberId = memberId;
 
         let result = null;
+        let targetOwnerId: ObjectId = null;
 
         try {
             result = await this.commentModel.create(input);
@@ -40,6 +44,20 @@ export class CommentService {
                     targetKey: 'propertyComments',
                     modifier: 1,
                 });
+                // Get property owner for notification
+                const property = await this.propertyService.getPropertyById(input.commentRefId);
+                if (property && property.memberId.toString() !== memberId.toString()) {
+                    targetOwnerId = property.memberId;
+                    await this.notificationService.createNotification({
+                        notificationType: NotificationType.COMMENT,
+                        notificationGroup: NotificationGroup.PROPERTY,
+                        notificationTitle: 'New Comment',
+                        notificationDesc: 'Someone commented on your property',
+                        authorId: memberId,
+                        receiverId: targetOwnerId,
+                        propertyId: input.commentRefId,
+                    });
+                }
                 break;
                 case CommentGroup.ARTICLE:
                     await this.boardArticleService.boardArticleStatsEditor({
@@ -47,6 +65,20 @@ export class CommentService {
                         targetKey: 'articleComments',
                         modifier: 1,
                     });
+                    // Get article owner for notification
+                    const article = await this.boardArticleService.getArticleById(input.commentRefId);
+                    if (article && article.memberId.toString() !== memberId.toString()) {
+                        targetOwnerId = article.memberId;
+                        await this.notificationService.createNotification({
+                            notificationType: NotificationType.COMMENT,
+                            notificationGroup: NotificationGroup.ARTICLE,
+                            notificationTitle: 'New Comment',
+                            notificationDesc: 'Someone commented on your article',
+                            authorId: memberId,
+                            receiverId: targetOwnerId,
+                            articleId: input.commentRefId,
+                        });
+                    }
                     break;
                 case CommentGroup.MEMBER:
                     await this.memberService.memberStatsEditor({
@@ -54,7 +86,17 @@ export class CommentService {
                         targetKey: 'memberComments',
                         modifier: 1,
                     });
-                    
+                    // Notify the member who received the comment
+                    if (input.commentRefId.toString() !== memberId.toString()) {
+                        await this.notificationService.createNotification({
+                            notificationType: NotificationType.COMMENT,
+                            notificationGroup: NotificationGroup.MEMBER,
+                            notificationTitle: 'New Comment',
+                            notificationDesc: 'Someone commented on your profile',
+                            authorId: memberId,
+                            receiverId: input.commentRefId,
+                        });
+                    }
                     break;
         }
 

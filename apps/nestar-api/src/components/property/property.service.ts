@@ -22,6 +22,8 @@ import * as moment from "moment";
 import { LikeService } from '../like/like.service';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class PropertyService {
@@ -30,6 +32,7 @@ export class PropertyService {
 		private readonly memberService: MemberService,
 		private readonly viewService: ViewService,
 		private readonly likeService: LikeService,
+		private readonly notificationService: NotificationService,
 	) {}
 
 
@@ -254,7 +257,7 @@ export class PropertyService {
 			likeRefId: likeRefId,
 			likeGroup: LikeGroup.PROPERTY,
 		};
-		0
+
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.propertyStatsEditor(
 			{
@@ -263,6 +266,19 @@ export class PropertyService {
 				modifier: modifier
 			}
 		);
+
+		// Create notification only when liking (not unliking) and not own property
+		if (modifier === 1 && target.memberId.toString() !== memberId.toString()) {
+			await this.notificationService.createNotification({
+				notificationType: NotificationType.LIKE,
+				notificationGroup: NotificationGroup.PROPERTY,
+				notificationTitle: 'New Like',
+				notificationDesc: 'Someone liked your property',
+				authorId: memberId,
+				receiverId: target.memberId,
+				propertyId: likeRefId,
+			});
+		}
 
 		if(!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;
@@ -339,6 +355,11 @@ export class PropertyService {
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
 
 		return result;
+	}
+
+	// Helper method for notifications
+	public async getPropertyById(propertyId: ObjectId): Promise<Property> {
+		return await this.propertyModel.findById(propertyId).lean().exec();
 	}
 
 }

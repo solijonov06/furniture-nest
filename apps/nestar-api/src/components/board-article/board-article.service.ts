@@ -14,6 +14,8 @@ import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../
 import { LikeService } from '../like/like.service';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeInput } from '../../libs/dto/like/like.input';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class BoardArticleService {
@@ -23,6 +25,7 @@ export class BoardArticleService {
       private readonly memberService: MemberService,  
       private readonly viewService: ViewService,
       private readonly likeService: LikeService,
+      private readonly notificationService: NotificationService,
    ) {}
 
 
@@ -157,6 +160,19 @@ export class BoardArticleService {
                modifier: modifier
             }
          );
+
+         // Create notification only when liking (not unliking) and not own article
+         if (modifier === 1 && target.memberId.toString() !== memberId.toString()) {
+            await this.notificationService.createNotification({
+               notificationType: NotificationType.LIKE,
+               notificationGroup: NotificationGroup.ARTICLE,
+               notificationTitle: 'New Like',
+               notificationDesc: 'Someone liked your article',
+               authorId: memberId,
+               receiverId: target.memberId,
+               articleId: likeRefId,
+            });
+         }
    
          if(!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
          return result;
@@ -239,6 +255,11 @@ export class BoardArticleService {
             },
          )
          .exec();
+   }
+
+   // Helper method for notifications
+   public async getArticleById(articleId: ObjectId): Promise<BoardArticle> {
+      return await this.boardArticleModel.findById(articleId).lean().exec();
    }
 
 }

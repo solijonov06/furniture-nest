@@ -8,7 +8,8 @@ import { Direction, Message } from '../../libs/enums/common.enum';
 import { FollowInquiry } from '../../libs/dto/follow/follow.input';
 import { lookupAuthMemberFollowed, lookupAuthMemberLiked, lookupFollowerData, lookupFollowingData } from '../../libs/config';
 import { T } from '../../libs/types/common';
-import { internalExecuteOperation } from '@apollo/server/dist/esm/ApolloServer';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class FollowService {
@@ -16,6 +17,7 @@ export class FollowService {
       @InjectModel('Follow') private readonly followModel: Model<Follower | Following>,
       private readonly memberService: MemberService,
       private readonly authService: AuthService,
+      private readonly notificationService: NotificationService,
    ) {}
 
    public async subscribe(followerId: ObjectId, followingId: ObjectId): Promise<Follower>{
@@ -30,6 +32,17 @@ export class FollowService {
 
       await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowings', modifier: 1})
       await this.memberService.memberStatsEditor({ _id: followingId, targetKey: 'memberFollowers', modifier: 1})
+
+      // Auto-create notification for the followed user
+      await this.notificationService.createNotification({
+         notificationType: NotificationType.FOLLOW,
+         notificationGroup: NotificationGroup.MEMBER,
+         notificationTitle: 'New Follower',
+         notificationDesc: 'Someone started following you',
+         authorId: followerId,
+         receiverId: followingId,
+      });
+
     return result;
    }
 
