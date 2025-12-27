@@ -7,18 +7,23 @@ import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
 import { shapeIntoMongoObjectId } from '../../libs/config';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { WithoutGuard } from '../auth/guards/without.guard';
 
 @Resolver()
 export class NotificationResolver {
 	constructor(private readonly notificationService: NotificationService) {}
 
-	@UseGuards(AuthGuard)
+	@UseGuards(WithoutGuard)
 	@Query(() => Notifications)
 	public async getNotifications(
 		@Args('input') input: NotificationsInquiry,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Notifications> {
 		console.log('Query: getNotifications');
+		// Return empty if not logged in
+		if (!memberId) {
+			return { list: [], metaCounter: [{ total: 0 }] };
+		}
 		return await this.notificationService.getNotifications(memberId, input);
 	}
 
@@ -40,10 +45,14 @@ export class NotificationResolver {
 		return await this.notificationService.markAllAsRead(memberId);
 	}
 
-	@UseGuards(AuthGuard)
+	@UseGuards(WithoutGuard)
 	@Query(() => Int)
 	public async getUnreadNotificationCount(@AuthMember('_id') memberId: ObjectId): Promise<number> {
 		console.log('Query: getUnreadNotificationCount');
+		// Return 0 if not logged in
+		if (!memberId) {
+			return 0;
+		}
 		return await this.notificationService.getUnreadCount(memberId);
 	}
 
