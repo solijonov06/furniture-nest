@@ -19,12 +19,17 @@ export class NotificationResolver {
 		@Args('input') input: NotificationsInquiry,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Notifications> {
-		console.log('Query: getNotifications');
+		console.log('Query: getNotifications, memberId:', memberId);
 		// Return empty if not logged in
 		if (!memberId) {
-			return { list: [], metaCounter: [{ total: 0 }] };
+			return { list: [], metaCounter: [] };
 		}
-		return await this.notificationService.getNotifications(memberId, input);
+		try {
+			return await this.notificationService.getNotifications(memberId, input);
+		} catch (err) {
+			console.log('getNotifications error:', err);
+			return { list: [], metaCounter: [] };
+		}
 	}
 
 	@UseGuards(AuthGuard)
@@ -48,12 +53,17 @@ export class NotificationResolver {
 	@UseGuards(WithoutGuard)
 	@Query(() => Int)
 	public async getUnreadNotificationCount(@AuthMember('_id') memberId: ObjectId): Promise<number> {
-		console.log('Query: getUnreadNotificationCount');
+		console.log('Query: getUnreadNotificationCount, memberId:', memberId);
 		// Return 0 if not logged in
 		if (!memberId) {
 			return 0;
 		}
-		return await this.notificationService.getUnreadCount(memberId);
+		try {
+			return await this.notificationService.getUnreadCount(memberId);
+		} catch (err) {
+			console.log('getUnreadNotificationCount error:', err);
+			return 0;
+		}
 	}
 
 	@UseGuards(AuthGuard)

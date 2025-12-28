@@ -36,3 +36,4 @@ const FaqSchema = new Schema(
 
 export default FaqSchema;
 
+

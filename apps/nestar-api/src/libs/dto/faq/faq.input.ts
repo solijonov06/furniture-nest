@@ -102,3 +102,4 @@ export class AllFaqsInquiry {
 	search?: AFISearch;
 }
 
+

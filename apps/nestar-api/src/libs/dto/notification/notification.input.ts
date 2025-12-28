@@ -81,3 +81,4 @@ export class NotificationsInquiry {
 	search?: NTISearch;
 }
 
+
