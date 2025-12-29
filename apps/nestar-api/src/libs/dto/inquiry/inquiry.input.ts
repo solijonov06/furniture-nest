@@ -116,3 +116,4 @@ export class AllInquiriesInquiry {
 	search?: AllInquiriesSearch;
 }
 
+

@@ -22,3 +22,4 @@ registerEnumType(InquiryStatus, {
 	name: 'InquiryStatus',
 });
 
+

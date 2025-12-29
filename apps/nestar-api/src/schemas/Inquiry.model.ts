@@ -62,3 +62,4 @@ const InquirySchema = new Schema(
 
 export default InquirySchema;
 
+

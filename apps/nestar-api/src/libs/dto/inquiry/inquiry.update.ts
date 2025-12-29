@@ -23,3 +23,4 @@ export class InquiryUpdate {
 	answeredAt?: Date;
 }
 
+

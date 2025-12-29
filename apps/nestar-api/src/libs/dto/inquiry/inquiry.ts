@@ -61,3 +61,4 @@ export class Inquiries {
 	metaCounter: TotalCounter[];
 }
 
+
