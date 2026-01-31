@@ -22,6 +22,8 @@ import * as moment from "moment";
 import { LikeService } from '../like/like.service';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class PropertyService {
@@ -30,6 +32,7 @@ export class PropertyService {
 		private readonly memberService: MemberService,
 		private readonly viewService: ViewService,
 		private readonly likeService: LikeService,
+		private readonly notificationService: NotificationService,
 	) {}
 
 
@@ -165,25 +168,25 @@ export class PropertyService {
 		const {
 			memberId,
 			locationList,
-			roomsList,
-			bedsList,
+			categoryList,
+			materialList,
+			conditionList,
 			typeList,
 			options,
 			pricesRange,
 			squaresRange,
-			periodsRange,
 			text,
 		} = input.search;
 
 		if (memberId) match.memberId = shapeIntoMongoObjectId(memberId);
 		if (locationList && locationList.length) match.propertyLocation = { $in: locationList };
-		if (roomsList && roomsList.length) match.propertyRooms = { $in: roomsList };
-		if (bedsList && bedsList.length) match.propertyBeds = { $in: bedsList };
+		if (categoryList && categoryList.length) match.propertyCategory = { $in: categoryList };
+		if (materialList && materialList.length) match.propertyMaterial = { $in: materialList };
+		if (conditionList && conditionList.length) match.furnitureCondition = { $in: conditionList };
 		if (typeList && typeList.length) match.propertyType = { $in: typeList };
 
 		if (pricesRange) match.propertyPrice = { $gte: pricesRange.start, $lte: pricesRange.end };
-		if (squaresRange) match.propertySquare = { $gte: squaresRange.start, $lte: squaresRange.end };
-		if (periodsRange) match.createdAt = { $gte: periodsRange.start, $lte: periodsRange.end };
+		if (squaresRange) match.propertyVolume = { $gte: squaresRange.start, $lte: squaresRange.end };
 
 		if (text) match.propertyTitle = { $regex: new RegExp(text, 'i') };
 
@@ -254,7 +257,7 @@ export class PropertyService {
 			likeRefId: likeRefId,
 			likeGroup: LikeGroup.PROPERTY,
 		};
-		0
+
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.propertyStatsEditor(
 			{
@@ -263,6 +266,19 @@ export class PropertyService {
 				modifier: modifier
 			}
 		);
+
+		// Create notification only when liking (not unliking) and not own property
+		if (modifier === 1 && target.memberId.toString() !== memberId.toString()) {
+			await this.notificationService.createNotification({
+				notificationType: NotificationType.LIKE,
+				notificationGroup: NotificationGroup.PROPERTY,
+				notificationTitle: 'New Like',
+				notificationDesc: 'Someone liked your property',
+				authorId: memberId,
+				receiverId: target.memberId,
+				propertyId: likeRefId,
+			});
+		}
 
 		if(!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;
@@ -332,12 +348,18 @@ export class PropertyService {
 
 	public async removePropertyByAdmin(propertyId: ObjectId): Promise<Property> {
 		console.log(propertyId);
-		const search: T = { _id: propertyId, propertyStatus: PropertyStatus.DELETE };
+		const search: T = { _id: propertyId };
+		// , propertyStatus: PropertyStatus.DELETE
 		const result: Property = await this.propertyModel.findOneAndDelete(search).exec();
 
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
 
 		return result;
+	}
+
+	// Helper method for notifications
+	public async getPropertyById(propertyId: ObjectId): Promise<Property> {
+		return await this.propertyModel.findById(propertyId).lean().exec();
 	}
 
 }

@@ -144,8 +144,8 @@ export class MemberResolver {
       const result = await new Promise((resolve, reject) => {
          stream
             .pipe(createWriteStream(url))
-            .on('finish', async () => resolve(true))
-            .on('error', () => reject(false));
+            .on('finish', () => resolve(true))
+            .on('error', (err) => reject(new Error(Message.UPLOAD_FAILED)));
       });
       if (!result) throw new Error(Message.UPLOAD_FAILED);
 
@@ -177,13 +177,13 @@ export class MemberResolver {
                stream
                   .pipe(createWriteStream(url))
                   .on('finish', () => resolve(true))
-                  .on('error', () => reject(false));
+                  .on('error', (err) => reject(new Error(Message.UPLOAD_FAILED)));
             });
             if (!result) throw new Error(Message.UPLOAD_FAILED);
 
             uploadedImages[index] = url;
          } catch (err) {
-            console.log('Error, file missing!');
+            console.log('Error, file missing:', err.message);
          }
       });
 

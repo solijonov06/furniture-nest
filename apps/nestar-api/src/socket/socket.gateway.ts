@@ -85,7 +85,7 @@ return await this.authService.verifyToken(token as string)
   }
 
   @SubscribeMessage('message')
-  public async handleMessage(client: WebSocket, payload: string): Promise<void> {
+  public async handleMessage(client: WebSocket, payload: string): Promise<any> {
     const authMember = this.clientsAuthMap.get(client);
     const newMessage: MessagePayLoad = {event: 'message', text: payload, memberData: authMember};    
 
@@ -96,6 +96,7 @@ return await this.authService.verifyToken(token as string)
     if(this.messageList.length > 5) this.messageList.splice(0,  this.messageList.length - 5); 
 
     this.emitMessage(newMessage);   
+    return null
   }
 
   private broadcastMessage(sender: WebSocket, message: InfoPayLoad | MessagePayLoad) {

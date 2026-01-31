@@ -12,7 +12,9 @@ import { SocketModule } from './socket/socket.module';
 
 @Module({
 	imports: [
-		ConfigModule.forRoot(),
+		ConfigModule.forRoot({
+			envFilePath: '.env.development',
+		}),
 		GraphQLModule.forRoot({
 			driver: ApolloDriver,
 			playground: true,

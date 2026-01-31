@@ -1,9 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum PropertyType {
-	APARTMENT = 'APARTMENT',
-	VILLA = 'VILLA',
-	HOUSE = 'HOUSE',
+	FURNITURE = 'FURNITURE',
+	HOME_DECOR = 'HOME_DECOR',
+	HOME_APPLIANCES = 'HOME_APPLIANCES',
 }
 registerEnumType(PropertyType, {
 	name: 'PropertyType',
@@ -19,16 +19,50 @@ registerEnumType(PropertyStatus, {
 });
 
 export enum PropertyLocation {
-	SEOUL = 'SEOUL',
-	BUSAN = 'BUSAN',
-	INCHEON = 'INCHEON',
-	DAEGU = 'DAEGU',
-	GYEONGJU = 'GYEONGJU',
-	GWANGJU = 'GWANGJU',
-	CHONJU = 'CHONJU',
-	DAEJON = 'DAEJON',
-	JEJU = 'JEJU',
+	NEWYORK = 'NEWYORK',
+	LOSANGELES = 'LOSANGELES',
+	CHICAGO = 'CHICAGO',
+	HOUSTON = 'HOUSTON',
+	PHOENIX = 'PHOENIX',
+	PHILADELPHIA = 'PHILADELPHIA',
+	SANANTONIO = 'SANANTONIO',
+	SANDIEGO = 'SANDIEGO',
+	DALLAS = 'DALLAS',
 }
 registerEnumType(PropertyLocation, {
 	name: 'PropertyLocation',
+});
+
+export enum PropertyMaterial {
+	WOOD = 'WOOD',
+	METAL = 'METAL',
+	FABRIC = 'FABRIC',
+	LEATHER = 'LEATHER',
+	PLASTIC = 'PLASTIC',
+	GLASS = 'GLASS',
+}
+registerEnumType(PropertyMaterial, {
+	name: 'PropertyMaterial',
+});
+
+export enum PropertyCategory {
+	BEDROOM = 'BEDROOM',
+	LIVING_ROOM = 'LIVING_ROOM',
+	KITCHEN = 'KITCHEN',
+	OFFICE = 'OFFICE',
+	OUTDOOR = 'OUTDOOR',
+}
+registerEnumType(PropertyCategory, {
+	name: 'PropertyCategory',
+});
+
+export enum FurnitureCondition {
+	NEW = 'NEW',
+	LIKE_NEW = 'LIKE_NEW',
+	GOOD = 'GOOD',
+	FAIR = 'FAIR',
+	POOR = 'POOR',
+}
+registerEnumType(FurnitureCondition, {
+	name: 'FurnitureCondition',
 });
