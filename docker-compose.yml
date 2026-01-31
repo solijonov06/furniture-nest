@@ -14,7 +14,7 @@ services:
       - monorepo-network
     env_file:
       - .env
-    command: bash -c "npm install && nest build nestar-api && npm run start:prod"
+    command: bash -c "npm install && npx nest build nestar-api && npm run start:prod"
 
   nestar-batch: 
     container_name: nestar-batch
@@ -29,7 +29,7 @@ services:
       - monorepo-network
     env_file:
       - .env
-    command: bash -c "npm install && nest build nestar-batch && npm run start:prod:batch"
+    command: bash -c "npm install && npx nest build nestar-batch && npm run start:prod:batch"
 
 networks:
   monorepo-network:
