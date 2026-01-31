@@ -14,7 +14,13 @@ export class LoggingInterceptor implements NestInterceptor{
         
 
         if(requestType === 'http'){
-            // Develop if needed
+            // For HTTP requests, also return the handler with logging
+            return next.handle().pipe(
+                tap((context) => {
+                    const responseTime = Date.now() - recordTime;
+                    this.logger.log(`HTTP Response - ${responseTime}ms`, `RESPONSE`);
+                })
+            );
         }else if(requestType === 'graphql'){
             /**Print request */
             const gqlContext = GqlExecutionContext.create(context);
